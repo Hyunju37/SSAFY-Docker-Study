@@ -8,9 +8,7 @@
 
 도커를 사용하는 경우에는 `OS위에 도커 엔진이 동작하고 그 위에서 컨테이너가 동작`한다.
 
-container  
-docker-engine  
-operating system 
+<img src="./images/2-1-1_컨테이너는 도커 엔진 위에서 동작한다.jpeg"  width="30%">
 
 운영체제(OS)는 자원을 효율적으로 관리하고, 사용자(SW 혹은 프로그램)와 HW간의 인터페이스를 제공한다.
 

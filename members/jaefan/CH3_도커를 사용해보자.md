@@ -95,6 +95,7 @@ vmware 혹은 virtuabox와 같은 가상화 SW를 사용하는 2번 방식과 �
 > <center>
 > <img src="./images/doekr installation.png" >
 ></center>
+>
 > #### step 03. 도커 데스크톱 설치 완료 
 ><center>
 >    <img src="./images/docker_desktop_icon.png" width=30%>
@@ -121,13 +122,15 @@ vmware 혹은 virtuabox와 같은 가상화 SW를 사용하는 2번 방식과 �
 >- Containers 탭에서는 실행 중인 컨테이너의 목록을 확인할 수 있다. 
 ><center>
 ><img src='./images/dockerdesktop-containers-tap.png' width=70%>
-><center>
+></center>
+>
 >#### Images 탭 화면
 >
 >- Images 탭에서는 내려받은 도커 이미지의 목록을 확인할 수 있다. 
 ><center>
 ><img src='./images/dockerdesktop-images-tap.png' width=70%>
 ></center>
+>
 >#### 도커 실행 중 여부 확인
 >
 >- 화면 좌측 하단에 표시되는 status를 통해 도커의 실행 여부를 확인할 수 있다. 
@@ -135,10 +138,12 @@ vmware 혹은 virtuabox와 같은 가상화 SW를 사용하는 2번 방식과 �
 ><center>
 >    <img src='./images/engine running.png' width=70%>
 ></center>
+>
 >- 도커 엔진이 실행 중이 아니라면 'Resource Saver mode' 혹은 'Engine paused' 상태를 확인할 수 있다.
 ><center>
 >    <img src='./images/resource saver mode.png' width=70%>  
 ></center>
+>
 ><center>
 >    <img src='./images/engine paused.png' width=70%>
 ></center>

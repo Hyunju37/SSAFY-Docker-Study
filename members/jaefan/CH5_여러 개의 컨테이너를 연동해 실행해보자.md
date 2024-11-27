@@ -271,9 +271,9 @@ docker container ls
 
 - 웹 브라우저에서 http://localhost:8085 에 접근해 워드프레스의 초기 화면을 확인한다.
 
-<img src='images/ch05-09.png' width=50%>
+    <img src='images/ch05-09.png' width=30%>
 
-<img src='images/ch05-10.png' width=50%>
+    <img src='images/ch05-10.png' width=30%>
 
 </br> 
 
@@ -310,4 +310,237 @@ docker image rm mysql:8.0
 
 </br> 
 
-## SECTION 03
+## SECTION 03. 명령어를 직접 작성하자
+
+### 소프트웨어와 데이터베이스의 관계
+
+- 워드프레스 사용을 위해서는 아파치, PHP 런타임, MySQL이 필요
+- **LAMP 스택** : 아파치, PHP, MySQL에 리눅스를 합친 조합
+    
+    <img src='images/ch05-15.png' width=70%>
+    
+    → 좀 전까지 우리가 한 것들 
+    
+- 시대가 흐름에 따라 특정 SW가 변경된 조합도 등장, 
+여전히 `리눅스 + 웹 서버 + 프로그래밍 언어 런타임 + DB`
+    - 아파치 → nginx
+    - MySQL → MariaDB or PostgreSQL
+- 컨테이너 구성도 워드프레스 실습과 마찬가지로 아래와 같이 구성하는 것이 일반적
+    - 컨테이너 1: 프로그램 본체 + 프로그램 런타임 + 웹서버
+    - 컨테이너 2: 데이터베이스
+
+- 내가 만든 MySQL 컨테이너
+    
+    ```bash
+    docker run \
+    	--name mysql-server \
+    	-dit \
+    	-e MYSQL_ROOT_PASSWORD=myrootpass \
+    	-e MYSQL_DATABASE=mydb \
+    	-e MYSQL_USER=jaehwan \
+    	-e MYSQL_PASSWORD=mypassword \
+    	mysql:8.0
+    ```
+    
+    <img src='images/ch05-16.png' width=70%>
+    
+- 내가 만든 wordpress 컨테이너
+    
+    ```bash
+    docker run \
+    	--name mywordpress \
+    	-dit \
+    	-p 8085:80 \
+    	-e WORDPRESS_DB_HOST=mysql-server \
+    	-e WORDPRESS_DB_NAME=mydb \
+    	-e WORDPRESS_DB_USER=jaehwan \
+    	-e WORDPRESS_DB_PASSWORD=mypassword \
+    	wordpress
+    ```
+    
+    <img src='images/ch05-17.png' width=70%>
+    
+
+## SECTION 04. 레드마인 및 MariaDB 컨테이너를 대상으로 연습하자
+
+### 레드마인 및 MySQL 컨테이너 생성
+
+<img src='images/ch05-18.png' width=70%>
+
+<aside>
+❗
+
+**레드마인?**
+
+레드마인(Redmine)은 오픈소스 기반의 프로젝트 관리 도구로, 이슈 관리, 간트 차트, 위키, 캘린더 등 다양한 기능을 제공한다.
+
+Git/SVN과 같은 버전 관리 시스템과 통합이 가능하며, 플러그인을 통해 확장성과 커스터마이징을 지원한다.
+
+웹 기반으로 다국어를 지원하고, 무료로 사용 가능하여 소규모부터 대규모 팀까지 효율적인 프로젝트 관리가 가능하다.
+
+</aside>
+
+**생성할 컨테이너 정보** 
+
+- 네트워크 이름: `redmine000net2`
+- MySQL 컨테이너 이름: `mysql000ex13`
+- MySQL 이미지 이름: `~~mysql~~` → `mysql:8.0`
+- 레드마인 컨테이너 이름: `redmine000ex14`
+- 레드마인 이미지 이름: `redmine`
+
+**실습**
+
+1. 네트워크 생성
+    
+    ```bash
+    docker network create redmine000net2
+    ```
+    
+2. MySQL 컨테이너 생성
+    
+    ```bash
+    docker run \
+    	--name mysql000ex13 \
+    	-dit \
+    	--net=redmine000net2 \
+    	-e MYSQL_ROOT_PASSWORD=myrootpass \
+    	-e MYSQL_DATABASE=redmine000db \
+    	-e MYSQL_USER=redmineuser \
+    	-e MYSQL_PASSWORD=redmineuserpassword \
+    	mysql:8.0 \
+    	--character-set-server=utf8mb4 \
+    	--collation-server=utf8mb4_unicode_ci \
+    	--default-authentication-plugin=mysql_native_password
+    ```
+    
+    <img src='images/ch05-19.png' width=70%>
+    
+3. 레드마인 컨테이너 생성
+    
+    ```bash
+    docker run \
+    	--name redmine000ex14 \
+    	-dit \
+    	--network redmine000net2 \
+    	-p 8086:3000 \
+    	-e REDMINE_DB_MYSQL=mysql000ex13 \ # 데이터베이스 컨테이너 이름
+    	-e REDMINE_DB_DATABASE=redmine000db \
+    	-e REDMINE_DB_USERNAME=redmineuser \
+    	-e REDMINE_DB_PASSWORD=redmineuserpassword \
+    	redmine
+    ```
+    
+    <img src='images/ch05-20.png' width=70%>
+    
+4. 확인
+    
+    웹 브라우저에서 http://localhost:8086 에 접근하면 레드마인의 초기화면을 확인할 수 있다.
+    
+    - 레드마인은 실행 시점에 데이터베이스 접속에 실패하면 컨테이너가 종료된다.
+    - 정상 실행 되었다면, 데이터베이스 접속까지 잘 수행 된 것이다.
+    
+    <img src='images/ch05-21.png' width=70%>
+    
+    <img src='images/ch05-22.png' width=70%>
+    
+5. 뒷정리
+    
+    ```bash
+    # 컨테이너 종료
+    docker container stop redmine000ex14
+    docker container stop mysql000ex13
+    
+    # 컨테이너 삭제
+    docker container rm redmine000ex14
+    docker container rm mysql000ex13 
+    
+    # 이미지 삭제 
+    docker image rm redmine
+    docker image rm mysql:8.0
+    ```
+    
+    <img src='images/ch05-23.png' width=70%>
+    
+
+### 레드마인 및 MariaDB 컨테이너 만들기
+
+- 앞서 구성한 레드마인-MySQL 조합에서 데이터베이스를 MariaDB로 교체
+- 고려해야 할 점
+    - MariaDB 컨테이너지만 MYSQL_ROOT_PASSWORD, MYSQL_DATABASE와 같이 옵션 이름에 MYSQL이 들어간다. (두 DB는 매우 긴밀한 관계를 가짐)
+
+**생성할 네트워크 및 컨테이너 정보** 
+
+- 네트워크 이름: `redmine000net3`
+- MariaDB 컨테이너 이름: `mariadb000ex15`
+- MariaDB 이미지 이름: `mariadb`
+- 레드마인 컨테이너 이름: `redmine000ex16`
+- 레드마인 이미지 이름: `redmine`
+
+**실습 순서**
+
+1. 네트워크 생성
+    
+    ```bash
+    docker network create redmine000net3
+    ```
+    
+    <img src='images/ch05-24.png' width=70%>
+    
+2. MariaDB 컨테이너 생성
+    
+    ```bash
+    docker run \
+    	--name mariadb000ex15 \
+    	-dit \
+    	--net=redmine000net3 \
+    	-e MYSQL_ROOT_PASSWORD=mariarootpass \
+    	-e MYSQL_DATABASE=redmine000db \
+    	-e MYSQL_USER=redmineuser \
+    	-e MYSQL_PASSWORD=redmineuserpassword \
+    	mariadb \
+    	--character-set-server=utf8mb4 \
+    	--collation-server=utf8mb4_unicode_ci \
+    	--default-authentication_plugin=mysql_native_password
+    ```
+    
+    !<img src='images/ch05-25.png' width=70%>
+    
+3. 레드마인 컨테이너 생성
+    
+    ```bash
+    docker run \
+    	--name redmine000ex16 \
+    	-dit \
+    	--network redmine000net3 \
+    	-p 8087:3000 \
+    	-e REDMINE_DB_MYSQL=mariadb000ex15 \  # 데이터베이스 컨테이너 이름
+    	-e REDMINE_DB_DATABASE=redmine000db \
+    	-e REDMINE_DB_USERNAME=redmineuser \
+    	-e REDMINE_DB_PASSWORD=redmineuserpassword \
+    	redmine
+    ```
+    
+    <img src='images/ch05-26.png' width=70%>
+4. 확인
+    - 웹 브라우저에서 http://localhost:8087 으로 접속해서 레드마인 초기화면 확인
+    
+    <img src='images/ch05-27.png' width=50%>
+    <img src='images/ch05-28.png' width=50%>
+    
+5. 뒷정리 
+
+```bash
+# 컨테이너 종료
+docker container stop redmine000ex16
+docker container stop mariadb000ex15
+
+# 컨테이너 삭제
+docker container rm redmine000ex16
+docker container rm mariadb000ex15
+
+# 이미지 삭제 
+docker image rm redmine
+docker image rm mariadb
+```
+
+<img src='images/ch05-29.png' width=70%>

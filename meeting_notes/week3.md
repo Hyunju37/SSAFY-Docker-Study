@@ -23,3 +23,26 @@
           ![image.png](../members/seoyun/images/CH5_5.png)
         
           - 해결 완료
+
+### CH6. 실전에 활용 가능한 컨테이너 사용법을 익히자
+
+- 연재환 
+    - Issues
+      - 바인드 마운트 실습 과정에서 연결한 로컬 디렉터리가 컨테이너 내부에서 잡히지 않음 
+        - 로컬 스토리지 (Users/jaehwan/Documents/apa_folder) 내부의 index.html에는 '안녕하세요'가 작성되어 있으나, 아파치 컨테이너를 웹 브라우저로 접속 (localhost:8090) 해보면 It Works! 메시지가 출력 됨.
+        
+        <img src='../members/jaefan/images/ch06-32.png' width=50%>
+
+        - 컨테이너 내부 (/usr/local/apache2/htdocs) 에도 index.html 존재 확인 
+        
+        <img src='../members/jaefan/images/ch06-33.png' width=50%>
+
+        - 컨테이너 내부의 index.html 파일 삭제 `rm index.html` 
+        - 그러나, 마운트한 로컬 스토리지 내부의 index.html 이 잡히지 않음.
+        - 해당 컨테이너와 로컬 스토리지 간의 바인드 마운트가 제대로 되지 않음을 인식.
+        - 최후의 수단으로 컨테이너 중지 -> 컨테이너 삭제 -> 컨테이너 재실행 절차로 인식 성공 
+
+        <img src='../members/jaefan/images/ch06-14.png' width=50%>
+
+      - 문제는 해결 했으나, 원인 파악이 되지 않음. 
+  

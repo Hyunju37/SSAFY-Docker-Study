@@ -1,5 +1,5 @@
 # SECTION 1. 워드프레스 구축
----
+
 ## 워드프레스 구축
 
 워드프레스는 웹 사이트를 만들기 위한 소프트웨어로, 아파치나 데이터베이스, PHP 런타임 등을 필요로 하기 때문에 구축을 위한 연습 소재로 좋다.
@@ -71,6 +71,7 @@ docker run --name <container_name> -dit --net=<network_name> -p <port> -e ... wo
 | 데이터 베이스 사용자 이름   | `-e WORDPRESS_DB_USER`      |
 | 데이터 베이스 비밀번호      | `-e WORDPRESS_DB_PASSSWORD` |
 
+---
 # SECTION 2. 워드프레스 및 MySQL 컨테이너 생성과 연동
 
 ```sh
@@ -104,7 +105,7 @@ C:\Users\Kwon>docker logs mysql000ex11
 2024-12-09T06:59:06.816914Z 0 [System] [MY-015018] [Server] MySQL Server Initialization - end.
 ```
 
-`default-authentication-plugin`이 없단다. 여기저기 찾아봤지만 아직 답을 찾지 못해 일단 제거하고 진행한다.
+~~`default-authentication-plugin`이 없단다. 여기저기 찾아봤지만 아직 답을 찾지 못해 일단 제거하고 진행한다.~~
 
 ```sh
 C:\Users\Kwon>docker run --name mysql000ex11 -dit --net=wp -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=wordpress---db
@@ -116,7 +117,7 @@ C:\Users\Kwon>docker ps
 CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                 NAMES
 686dada7cdad   mysql:8   "docker-entrypoint.s…"   8 seconds ago   Up 5 seconds   3306/tcp, 33060/tcp   mysql000ex11
 ```
-책과 버전을 맞춰주니 된다.
+책과 버전을 맞춰주니 된다. mysql 8 버전으로 진행해야 한다.
 
 ```sh
 C:\Users\Kwon>docker run --name mysql000ex11 -dit --net=wp -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=wordpress---db -e MYSQL_USER=wordpress000user -e MYSQL_PASSWORD=1234 mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -129,3 +130,19 @@ aef41f135fbd   wordpress   "docker-entrypoint.s…"   41 minutes ago   Up 41 min
 ```
 
 정상적으로 실행되는 것을 확인할 수 있다.
+---
+
+# SECTION 3. 명령어를 직접 작성하자
+
+## SW와 DB의 관계
+
+워드프레스를 사용하려면 워드프레스 프로그램 외에도 아파치와 PHP 런타임, MySQL이 필요했다.
+워드프에스 외에도 이러한 형식으로 구성되는 웹 시스템이 많다.
+
+특히 아파치, PHP, MySQL에 리눅스를 합친 조합은 **LAMP 스택**이라고 부른다.
+SW가 발전하면서 아파치가 nginx로 바뀌기도 하고, MySQL이 MariaDB나 PosetgreSQL로 바뀐 조합도 나타났지만
+'**리눅스 + 웹서버 + 프로그래밍 언어 런타임 + 데이터베이스**'의 조합임은 변함이 없다.
+
+따라서 컨테이너도 '프로그램 본체 + 프로그램 런타임 + 웹 서버' 컨테이너와 '데이터베이스' 컨테이너로 구성해 운령하는 사례를 흔히 볼 수 있다.
+
+글이 길어짐에 따라 포스팅에서는 실습을 제외하도록 한다. 워드프레스 - MySQL과 거의 비슷한 과정으로 진행된다.

@@ -1,3 +1,6 @@
+Notion : https://jaefan.notion.site/CH08-15ad2e168cd3804d8dbdf77bf0c84929?pvs=4
+
+
 ## SECTION 01. 쿠버네티스란?
 
 ### 쿠버네티스란?

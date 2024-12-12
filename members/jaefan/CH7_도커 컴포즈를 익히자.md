@@ -1,3 +1,5 @@
+Notion: https://jaefan.notion.site/CH07-159d2e168cd380c9a8fce5198b381d89?pvs=4
+
 ## SECTION 01. 도커 컴포즈란?
 
 ### 도커 컴포즈 ?

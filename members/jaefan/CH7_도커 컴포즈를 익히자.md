@@ -507,7 +507,7 @@ docker-compose -f /Users/jaehwan/Documents/com_folder/docker-compose.yml up -d
             
     - 에러 발생(01)
         
-        <img src='images/ch07-08.png' width=50%>
+        <img src='images/ch07-08.png' width=90%>
         
     - 에러 원인
         - docker-compose.yml 파일에서 environment 섹션의 값을 리스트 형식으로 작성했기 때문
@@ -556,7 +556,7 @@ docker-compose -f /Users/jaehwan/Documents/com_folder/docker-compose.yml up -d
             
     - 재 실행 → 에러 발생(02)
         
-        <img src='images/ch07-09.png' width=50%>
+        <img src='images/ch07-09.png' width=90%>
         
     - 에러 원인
         - MySQL 5.7이 ARM 아키텍처를 지원하지 않는 듯 함
@@ -577,19 +577,18 @@ docker-compose -f /Users/jaehwan/Documents/com_folder/docker-compose.yml up -d
         
     - 정상 실행
         
-        <img src='images/ch07-11.png' width=50%>
+        <img src='images/ch07-11.png' width=90%>
         
 
 <aside>
-❗
 
-**WARN: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion**
+    ❗ WARN: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion
 
-Docker Compose의 최신 버전에서 기존에 사용되던 version 필드가 더 이상 필요하지 않음을 알리는 경고.
+    Docker Compose의 최신 버전에서 기존에 사용되던 version 필드가 더 이상 필요하지 않음을 알리는 경고.
 
-이는 성능이나 기능에 영향을 주지 않은 단순 경고이기 때문에, 무시 해도 됨.
+    이는 성능이나 기능에 영향을 주지 않은 단순 경고이기 때문에, 무시 해도 됨.
 
-깔끔하게 정리하고 싶다면 **docker-compose.yml 파일 내의 version 필드를 제거.**
+    깔끔하게 정리하고 싶다면 docker-compose.yml 파일 내의 version 필드를 제거.
 
 </aside>
 
